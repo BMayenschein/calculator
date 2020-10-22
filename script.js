@@ -45,9 +45,6 @@ numbers.forEach((number) => {
     number.addEventListener("click", updateDisplay)
 });
 
-function gofuckyourself() {
-    return document.getElementById('display');
-}
 
 function oper(e) {
     display = document.getElementById('display');
