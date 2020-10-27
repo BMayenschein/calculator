@@ -1,3 +1,13 @@
+//Global variables
+let prevNumber = 0;
+let currentNumber = 0;
+let operator = "+";
+let ans = 1;
+
+function isFloat(ans) {
+    return ans === ans && ans % 1 !== 0;
+}
+
 function add(a,b) {
     return a+b;
 }
@@ -18,66 +28,80 @@ function operate(operator, a, b) {
     let numA = Number(a);
     let numB = Number(b);
     if (operator == "+") {
-        return add(numA, numB);
+        ans = add(numA, numB);
+        if (isFloat(ans)) {
+            return ans.toFixed(2);
+        }
+        return ans;
     }
     else if (operator == "-") {
-        return subtract(numA, numB);
+        ans = subtract(numA, numbB);
+        if (isFloat(ans)) {
+            return ans.toFixed(2);
+        }
+        return ans;
     }
     else if (operator == "*") {
-        return multiply(numA, numB);
+        ans = multiply(numA, numB);
+        if (isFloat(ans)) {
+            return ans.toFixed(2);
+        }
+        return ans;
     }
     else if (operator == "/") {
-        return divide(numA, numB);
+        if (numB === 0) {
+            return `You can't divide by 0`
+        }
+        ans = divide(numA, numB);
+        if (isFloat(ans)) {
+            return ans.toFixed(2);
+        }
+        return ans;
     }
 }
 
-let g_Operator = '+';
-let g_a = '0';
-let g_b = '0';
-
 function updateDisplay(e) {
-    display = document.getElementById('display');
-    display.innerText = display.innerText + e.target.id;
+    display = document.getElementById("display");
+    if (display.innerText == 0) {
+        display.innerText = " ";
+    }
+    display.innerText += e.target.id;
+    currentNumber = display.innerText;
 }
 
-const numbers = document.querySelectorAll('.number');
+const numbers = document.querySelectorAll(".number");
 numbers.forEach((number) => {
     number.addEventListener("click", updateDisplay)
-});
+})
 
-
-function oper(e) {
-    display = document.getElementById('display');
-    g_b = display.innerText;
-    g_a = operate(g_Operator, g_a, g_b);
-    g_Operator = e.target.innerText;
+function operaterPressed(e) {
+    display = document.getElementById("display");
+    prevNumber = operate(operator, prevNumber, currentNumber);
+    operator = e.target.innerText;
     display.innerText = " ";
 }
 
-function clear() {
-    display = document.getElementById('display');
-    display.innerText = ' ';
-    g_a = 0;
-    g_b = 0;
-}
+const operators = document.querySelectorAll(".operator");
+operators.forEach((operator) => {
+    operator.addEventListener("click", operaterPressed)
+})
 
-const clearscreen = document.getElementById('ac');
-clearscreen.addEventListener('click', clear);
-
-function getEqual(operator, a) {
-    let b = document.getElementById('display').innerText;
-    console.log(operate(g_Operator, g_a, b));
-    ans = operate(g_Operator, g_a, b);
+function getAnswer(e) {
     display = document.getElementById('display');
+    ans = operate(operator, prevNumber, currentNumber);
     display.innerText = ans;
+    return ans;
+}
+const EQ = document.querySelector(".EQ");
+EQ.addEventListener("click", getAnswer);
+
+function reset(e) {
+    prevNumber = 0;
+    currentNumber = 0;
+    operator = "+";
+    display = document.getElementById('display');
+    display.innerText = " ";
 
 }
-
-const EQ = document.getElementById('EQ');
-EQ.addEventListener("click", getEqual);
-
-const op = document.querySelectorAll('.operator');
-op.forEach((op) => {
-    op.addEventListener("click", oper)
-});
-
+const clear = document.querySelector(".clear");
+clear.addEventListener("click", reset);
